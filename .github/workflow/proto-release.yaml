@@ -1,0 +1,51 @@
+name: Buf Generate & Commit
+
+on:
+  # main 直 push / merge かつ .proto に差分があるとき
+  push:
+    branches: [main]
+    paths:
+      - "schema/proto/**/*.proto"
+  # 手動トリガ
+  workflow_dispatch:
+
+jobs:
+  generate-commit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      # ───────── チェックアウト ─────────
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 差分検知と push 用
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ───────── Buf CLI ─────────
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ───────── コード生成 ─────────
+      - name: Generate Go SDK
+        run: buf generate --template schema/buf.gen.go.yaml
+
+      # ───────── 差分があればコミット ─────────
+      - name: Commit & push generated code
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Git user を bot に設定
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name  "github-actions[bot]"
+
+          # 生成物ディレクトリをステージ
+          git add schema/gen
+
+          # 差分がある場合のみコミット & 同ブランチへ push
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(ci): regenerate Go SDK from proto [skip ci]"
+            git push origin HEAD
+          else
+            echo "No changes in generated code - nothing to commit."
+          fi
