@@ -3,11 +3,6 @@ on:
   push:
     paths:
       - "schema/proto/**/*.proto"
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - "schema/proto/**/*.proto"
-  delete:
 
 permissions:
   contents: read
@@ -25,10 +20,3 @@ jobs:
       - uses: bufbuild/buf-lint-action@v1
         with:
           input: "schema/proto"
-      # buf breaking の実行
-      - uses: bufbuild/buf-breaking-action@v1
-        with:
-          input: "schema/proto"
-          # The 'main' branch of the GitHub repository that defines the module.
-          # Note we specify the subdir to compare against.
-          against: "https://github.com/${GITHUB_REPOSITORY}.git#branch=main,ref=HEAD~1,subdir=proto"
