@@ -29,7 +29,7 @@ jobs:
       # ───────── コード生成 ─────────
       - name: Generate Go SDK
         working-directory: ./schema
-        run: buf generate --template schema/buf.gen.go.yaml
+        run: make generate/go
 
       # ───────── 差分があればコミット ─────────
       - name: Commit & push generated code
