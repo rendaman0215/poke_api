@@ -10,7 +10,6 @@ service DexImageService {
 message GetImageRequest {
   int32 id = 1;
   int32 form = 2;
-  int32 shiny = 3;
 }
 
 message GetImageResponse {
