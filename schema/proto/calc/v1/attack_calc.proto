@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package calc.v1;
+
+import "calc/v1/calc.proto";
+
+// ダメージ計算リクエスト
+message DamageCalcRequest {
+  // 攻撃ポケモン詳細
+  AttackPoekmon attacker = 1;
+  // 防御ポケモン詳細
+  DeffencePokemon defender = 2;
+  // 技名
+  string move = 3;
+  // 環境情報
+  Environment environment = 4;
+  // 壁情報
+  Wall wall = 5;
+}
+
+// ダメージ計算結果
+message DamageCalcResponse {
+  int32 damage = 1;
+}
+
+// ダメージ計算サービス
+service DamageCalcService {
+  // ダメージ計算
+  rpc DamageCalc (DamageCalcRequest) returns (DamageCalcResponse);
+}
