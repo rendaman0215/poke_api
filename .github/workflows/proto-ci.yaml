@@ -8,8 +8,7 @@ on:
     paths:
       - "schema/proto/**/*.proto"
   delete:
-    paths:
-      - "schema/proto/**/*.proto"
+
 permissions:
   contents: read
   pull-requests: write
@@ -29,7 +28,7 @@ jobs:
       # buf breaking の実行
       - uses: bufbuild/buf-breaking-action@v1
         with:
-          input: "proto"
+          input: "schema/proto"
           # The 'main' branch of the GitHub repository that defines the module.
           # Note we specify the subdir to compare against.
           against: "https://github.com/${GITHUB_REPOSITORY}.git#branch=main,ref=HEAD~1,subdir=proto"
