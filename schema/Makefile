@@ -16,8 +16,6 @@ lintfix: $(BUF) $(PROTOLINT) $(PROTOLINT_PLUGIN)
 	@$(PROTOLINT) -fix -plugin $(PROTOLINT_PLUGIN) $(PROTO_PATH)
 
 .PHONY: generate
-generate: ## Generate all code
-generate: $(BUF)
 generate: generate/go
 
 .PHONY: generate/go
