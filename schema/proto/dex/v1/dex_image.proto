@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dex.v1;
+
+service DexImageService {
+  // Get image
+  rpc GetImage(GetImageRequest) returns (GetImageResponse);
+}
+
+message GetImageRequest {
+  int32 id = 1;
+  int32 form = 2;
+}
+
+message GetImageResponse {
+  string url = 1;
+}
